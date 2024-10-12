@@ -141,18 +141,27 @@
   };
 
   Game_CharacterBase.prototype.moveDiagonally = function (horz, vert) {
+      const originalSpeed = this.moveSpeed();  // Store the original movement speed
+    
+    // Reduce speed for diagonal movement (multiply by ~0.707 to normalize distance)
+    this.setMoveSpeed(originalSpeed * 0.707);
+
+    // Perform the diagonal movement
     _Game_CharacterBase_moveDiagonally.apply(this, arguments);
 
     const isAnimated = this._isDiagonalAnimatedCharacter;
 
     if (isAnimated) {
-      if (this.isCharacterIndexEven()) this.setImage(this.characterName(), this.characterIndex() + 1);
-      switch (horz) {
-        case 4: this.setDirection(vert === 2 ? 2 : 4); break;
-        case 6: this.setDirection(vert === 2 ? 6 : 8); break;
-      }
+        if (this.isCharacterIndexEven()) this.setImage(this.characterName(), this.characterIndex() + 1);
+        switch (horz) {
+            case 4: this.setDirection(vert === 2 ? 2 : 4); break;
+            case 6: this.setDirection(vert === 2 ? 6 : 8); break;
+        }
     }
-  };
+
+    // Restore the original movement speed after the diagonal move
+    this.setMoveSpeed(originalSpeed);
+};
 
   Game_Character.prototype.findDirectionTo = function (goalX, goalY) {
     const searchLimit = this.searchLimit();
