@@ -100,7 +100,23 @@
   };
 
   Game_Player.prototype.getInputDirection = function () {
-    return Input.dir8;
+      const direction = Input.dir8;  // Get the current 8-directional input
+  
+      // Count how many directions are pressed
+      const up = Input.isPressed('up');
+      const down = Input.isPressed('down');
+      const left = Input.isPressed('left');
+      const right = Input.isPressed('right');
+  
+      const numPressed = [up, down, left, right].filter(pressed => pressed).length;
+  
+      // Cancel movement if 3 or more directions are pressed
+      if (numPressed >= 3) {
+          return 0;  // No movement
+      }
+  
+      // Otherwise, return the directional input as usual
+      return direction;
   };
 
   Game_Player.prototype.executeMove = function (direction) {
